@@ -33,6 +33,9 @@
         <extension module="org.wildfly.extension.undertow"/>
         <extension module="org.wildfly.iiop-openjdk"/>
     </extensions>
+    <system-properties>
+        <property name="eclipselink.archive.factory" value="org.jipijapa.eclipselink.JBossArchiveFactoryImpl"/>
+    </system-properties>
     <management>
         <security-realms>
             <security-realm name="ManagementRealm">
@@ -150,8 +153,9 @@
                         <password>sa</password>
                     </security>
                 </datasource>
-                <datasource jndi-name="java:jboss/datasources/MySQLDS" enabled="${mysql.enabled}" use-java-context="true" pool-name="MySQLDS" use-ccm="true">
-                    <connection-url>jdbc:mysql://${env.OPENSHIFT_MYSQL_DB_HOST}:${env.OPENSHIFT_MYSQL_DB_PORT}/${env.OPENSHIFT_APP_NAME}</connection-url>
+                <datasource jndi-name="java:/jdbc/telecloudDatasource" enabled="${mysql.enabled}" use-java-context="true" pool-name="telecloudDatasource" use-ccm="true">
+                    <connection-url>jdbc:mysql://${env.OPENSHIFT_MYSQL_DB_HOST}:${env.OPENSHIFT_MYSQL_DB_PORT}/${env.OPENSHIFT_APP_NAME}?zeroDateTimeBehavior=convertToNull</connection-url>
+                    <driver-class>com.mysql.jdbc.Driver</driver-class>
                     <driver>mysql</driver>
                     <security>
                       <user-name>${env.OPENSHIFT_MYSQL_DB_USERNAME}</user-name>
@@ -501,6 +505,22 @@
                     <authorization>
                         <policy-module code="Delegating" flag="required"/>
                     </authorization>
+                </security-domain>
+                <security-domain name="telecloudRealm">
+                    <authentication>
+                        <login-module code="Database" flag="required">
+                            <module-option name="dsJndiName" value="java:/jdbc/telecloudDatasource"/>
+                            <module-option name="hashUserPassword" value="false"/>
+                            <module-option name="hashStorePassword" value="false"/>
+                            <module-option name="principalsQuery" value="select password from account where email=?"/>
+                            <module-option name="rolesQuery" value="select agroup,'Roles' from account where email=?"/>
+                            <module-option name="unauthenticatedIdentity" value="guest"/>
+                        </login-module>
+                        <login-module code="RoleMapping" flag="required">
+                            <module-option name="rolesProperties" value="file:${jboss.server.config.dir}/telecloudRealm.properties"/>
+                            <module-option name="replaceRole" value="false"/>
+                        </login-module>
+                    </authentication>
                 </security-domain>
             </security-domains>
         </subsystem>

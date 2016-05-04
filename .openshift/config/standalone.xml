@@ -154,7 +154,7 @@
                     </security>
                 </datasource>
                 <datasource jndi-name="java:/jdbc/telecloudDatasource" enabled="${mysql.enabled}" use-java-context="true" pool-name="telecloudDatasource" use-ccm="true">
-                    <connection-url>jdbc:mysql://${env.OPENSHIFT_MYSQL_DB_HOST}:${env.OPENSHIFT_MYSQL_DB_PORT}/$telecloud?zeroDateTimeBehavior=convertToNull</connection-url>
+                    <connection-url>jdbc:mysql://${env.OPENSHIFT_MYSQL_DB_HOST}:${env.OPENSHIFT_MYSQL_DB_PORT}/telecloud?zeroDateTimeBehavior=convertToNull</connection-url>
                     <driver-class>com.mysql.jdbc.Driver</driver-class>
                     <driver>mysql</driver>
                     <security>

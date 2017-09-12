@@ -19,6 +19,7 @@ echo "Eclipse Persistency modules copyied."
 config_dir=/wildfly/standalone/configuration
 cp /opt/app-root/src/WF-config/standalone.xml $config_dir
 cp /opt/app-root/src/WF-config/telecloudRealm.properties $config_dir
+cp /opt/app-root/src/WF-config/ateisRealm.properties $config_dir
 
 echo "Wildfly standalone.xml copyied."
 

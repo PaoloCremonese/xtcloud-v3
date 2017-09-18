@@ -24,6 +24,7 @@ cp /opt/app-root/src/WF-config/ateisRealm.properties $config_dir
 echo "Wildfly standalone.xml copyied."
 
 cp /opt/app-root/src/libTeledataONEcfgIF.so /wildfly/standalone/lib/ext
+cp /opt/app-root/src/libTeledataONEcfgIF_3.so /wildfly/standalone/lib/ext
 
 echo "CNative libTeledataONEcfgIF.so library copyied."
 

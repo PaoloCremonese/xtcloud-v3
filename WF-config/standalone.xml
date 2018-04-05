@@ -521,9 +521,12 @@
             <server name="default-server">
                 <http-listener name="default" socket-binding="http"/>
                 <host name="default-host" alias="localhost">
+                    <location name="/directory-listing-uri" handler="directory-listing-handler"/>
                     <location name="/" handler="welcome-content"/>
                     <filter-ref name="server-header"/>
                     <filter-ref name="x-powered-by-header"/>
+                    <filter-ref name="gzipFilter" predicate="exists['%{o,Content-Type}'] and regex[pattern='(?:application/javascript|text/css|text/html|text/xml|application/json)(;.*)?', value=%{o,Content-Type}, full-match=true]"/>
+                    <filter-ref name="Vary-header"/>
                 </host>
             </server>
             <servlet-container name="default">
@@ -531,11 +534,14 @@
                 <websockets/>
             </servlet-container>
             <handlers>
+                <file name="directory-listing-handler" path="/data/app-resources/installer" directory-listing="true"/>
                 <file name="welcome-content" path="${jboss.home.dir}/welcome-content"/>
             </handlers>
             <filters>
                 <response-header name="server-header" header-name="Server" header-value="WildFly/8"/>
                 <response-header name="x-powered-by-header" header-name="X-Powered-By" header-value="Undertow/1"/>
+                <response-header name="Vary-header" header-name="Vary" header-value="Accept-Encoding"/>
+                <gzip name="gzipFilter"/>
             </filters>
         </subsystem>
         <subsystem xmlns="urn:jboss:domain:webservices:2.0">
